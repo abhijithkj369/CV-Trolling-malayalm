@@ -158,13 +158,12 @@ def generate_malayalam_troll(section_title, section_content):
     return random.choice(section_trolls)
 
 
-@app.post("/api/troll_cv")
+@app.post("/troll_cv")  # Changed from /api/troll_cv
 async def troll_cv(file: UploadFile = File(...)):
     """Main endpoint to process CV and return trolling text"""
     print(f"\n📁 Received file: {file.filename}")
     
     try:
-        # Read file
         file_bytes = await file.read()
         print(f"📊 File size: {len(file_bytes)} bytes")
         
@@ -182,33 +181,21 @@ async def troll_cv(file: UploadFile = File(...)):
         if not cv_text or len(cv_text) < 50:
             return JSONResponse(
                 status_code=400,
-                content={"error": "Could not extract text from file. Please check the file format."}
+                content={"error": "Could not extract text from file."}
             )
         
-        print(f"📄 Extracted text length: {len(cv_text)} characters")
-        
-        # Detect CV sections
-        print("🔍 Detecting CV sections...")
         sections = detect_sections(cv_text)
-        print(f"📋 Found {len(sections)} sections")
         
-        # Generate Malayalam trolls for each section
-        print("😂 Generating Malayalam trolls...")
         trolled_sections = []
-        
-        for section in sections[:6]:  # Limit to 6 sections
-            print(f"  ✓ Processing: {section['title']}")
+        for section in sections[:6]:
             troll_text = generate_malayalam_troll(
                 section["title"], 
                 section["content"]
             )
             trolled_sections.append({
                 "title": section["title"],
-                "original": section["content"][:150],  # First 150 chars
                 "troll": troll_text
             })
-        
-        print(f"✅ Successfully generated {len(trolled_sections)} trolled sections\n")
         
         return JSONResponse(content={
             "success": True,
@@ -217,23 +204,15 @@ async def troll_cv(file: UploadFile = File(...)):
         
     except Exception as e:
         print(f"❌ Error: {str(e)}")
-        import traceback
-        traceback.print_exc()
         return JSONResponse(
             status_code=500,
             content={"error": f"Server error: {str(e)}"}
         )
 
-
 @app.get("/")
 def read_root():
-    return {
-        "message": "CV Troll Malayalam API is running! 🚀",
-        "status": "active",
-        "endpoints": {
-            "POST /api/troll-cv": "Upload CV to get Malayalam trolls"
-        }
-    }
+    return {"message": "CV Troll Malayalam API is running! 🚀"}
+
 
 
 @app.get("/api/test")
