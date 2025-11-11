@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "CV Troll Malayalam - Roast Your CV with Humor",
-  description: "Upload your CV and get hilariously roasted in Malayalam! A fun web app that trolls each section of your resume with witty Malayalam commentary.",
+  description: "Upload your CV and get hilariously roasted in Malayalam!",
 };
 
 export default function RootLayout({
@@ -23,9 +23,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
         {children}
       </body>

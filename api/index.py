@@ -158,7 +158,7 @@ def generate_malayalam_troll(section_title, section_content):
     return random.choice(section_trolls)
 
 
-@app.post("/troll_cv")  # Changed from /api/troll_cv
+@app.post("/api/troll_cv")  # Changed from /api/troll_cv
 async def troll_cv(file: UploadFile = File(...)):
     """Main endpoint to process CV and return trolling text"""
     print(f"\n📁 Received file: {file.filename}")
