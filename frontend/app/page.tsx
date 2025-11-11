@@ -27,26 +27,18 @@ export default function Home() {
     formData.append('file', file);
 
     try {
-      const apiUrl = process.env.NODE_ENV === 'development'
-        ? 'http://localhost:8000/api/troll_cv'
-        : '/api/troll_cv';
-      
-      console.log('Sending request to:', apiUrl);
+      const apiUrl = '/api/troll_cv';
       
       const response = await fetch(apiUrl, {
         method: 'POST',
         body: formData,
       });
 
-      console.log('Response status:', response.status);
-
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log('Response data:', data);
-      
       setTrolledCV(data);
     } catch (error: any) {
       console.error('Error:', error);
@@ -119,7 +111,7 @@ export default function Home() {
                       📌 {section.title}
                     </h3>
                     <div className="bg-white p-4 rounded-md">
-                      <p className="text-2xl text-purple-700 leading-relaxed" style={{fontFamily: 'sans-serif'}}>
+                      <p className="text-2xl text-purple-700 leading-relaxed">
                         {section.troll}
                       </p>
                     </div>
@@ -131,15 +123,6 @@ export default function Home() {
                 </div>
               )}
             </div>
-          )}
-
-          {trolledCV && (
-            <details className="mt-4 p-4 bg-gray-100 rounded-lg text-sm">
-              <summary className="cursor-pointer font-semibold">Debug Info (Click to expand)</summary>
-              <pre className="mt-2 overflow-auto">
-                {JSON.stringify(trolledCV, null, 2)}
-              </pre>
-            </details>
           )}
         </div>
       </div>
